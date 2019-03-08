@@ -13,11 +13,17 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
 });
 
 (async function() {
+  let indexTemplate = Handlebars.compile(
+    (await readFile(resolve(tmpl, `index.hbs`))).toString()
+  );
+
   let presTemplate = Handlebars.compile(
     (await readFile(resolve(tmpl, `presentation.hbs`))).toString()
   );
 
-  for (let presentation of await readdir(src)) {
+  let presentations = await readdir(src);
+
+  for (let presentation of presentations) {
     let presPath = resolve(src, presentation);
     let outputPath = resolve(output, presentation);
 
@@ -48,4 +54,17 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
       presTemplate({ slides })
     );
   }
+
+  try {
+    await mkdir(output, { recursive: true });
+  } catch (e) {
+    if (e.code !== "EEXIST") {
+      throw e;
+    }
+  }
+
+  await writeFile(
+    resolve(output, "index.html"),
+    indexTemplate({ presentations })
+  );
 })();
