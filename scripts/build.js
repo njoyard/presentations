@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { mkdir, readdir, readFile, writeFile } = require("fs-extra");
+const { copy, mkdir, readdir, readFile, writeFile } = require("fs-extra");
 const Handlebars = require("handlebars");
 const { dirname, resolve } = require("path");
 
@@ -11,6 +11,10 @@ const output = resolve(dirname(__dirname), "build");
 Handlebars.registerHelper("isMarkdown", function(slide) {
   return slide.type === "markdown";
 });
+
+function isImage(file) {
+  return file.endsWith(".png");
+}
 
 (async function() {
   let indexTemplate = Handlebars.compile(
@@ -28,9 +32,10 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
     let presPath = resolve(src, presentation);
     let outputPath = resolve(output, presentation);
 
+    let presFiles = await readdir(presPath);
     let slides = await Promise.all(
-      (await readdir(presPath))
-        .filter(slide => slide !== "manifest.json")
+      presFiles
+        .filter(file => file !== "manifest.json" && !isImage(file))
         .sort()
         .map(async slide => {
           return {
@@ -58,6 +63,10 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
       if (e.code !== "EEXIST") {
         throw e;
       }
+    }
+
+    for (let image of presFiles.filter(isImage)) {
+      await copy(resolve(presPath, image), resolve(outputPath, image));
     }
 
     for (let slide of slides.filter(s => s.type === "markdown")) {

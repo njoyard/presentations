@@ -1,26 +1,33 @@
 <!doctype html>
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/css/reveal.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/css/theme/serif.min.css">
-</head>
-<body>
-  <div class="reveal">
-    <div class="slides">
-      {{#each slides as |slide|}}
-        {{#if (isMarkdown slide)}}
-          <section data-markdown="{{slide.slide}}"></section>
-        {{else}}
-          <section>
-            {{slide.content}}
-          </section>
-        {{/if}}
-      {{/each}}
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/css/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/css/theme/serif.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/lib/css/zenburn.min.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        {{#each slides as |slide|}}
+          {{#if (isMarkdown slide)}}
+            <section data-markdown="{{slide.slide}}" data-separator-vertical="^\n\n"></section>
+          {{else}}
+            <section>
+              {{slide.content}}
+            </section>
+          {{/if}}
+        {{/each}}
+      </div>
     </div>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/js/reveal.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/marked.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/markdown.min.js"></script>
-  <script>
-    Reveal.initialize();
-  </script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/js/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/marked.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/highlight/highlight.min.js"></script>
+    <script>
+      hljs.initHighlightingOnLoad();
+      Reveal.initialize({
+        history: true
+      });
+    </script>
+  </body>
+</html>
