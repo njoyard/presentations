@@ -1,8 +1,13 @@
 <!doctype html>
-<body style="margin: 0;">
+<body>
   <ul>
-    {{#each presentations as |presentation|}}
-      <li><a href="{{presentation}}/">{{presentation}}</a></li>
+    {{#each manifests as |prez|}}
+      <li>
+        <a href="{{prez.presentation}}/">{{prez.title}}</a>
+        {{#if prez.description}}
+          &ndash;<i>{{prez.description}}</i>
+        {{/if}}
+      </li>
     {{/each}}
   </ul>
 

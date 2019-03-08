@@ -22,20 +22,35 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
   );
 
   let presentations = await readdir(src);
+  let manifests = [];
 
   for (let presentation of presentations) {
     let presPath = resolve(src, presentation);
     let outputPath = resolve(output, presentation);
 
     let slides = await Promise.all(
-      (await readdir(presPath)).sort().map(async slide => {
-        return {
-          slide,
-          type: slide.endsWith(".md") ? "markdown" : "raw",
-          content: (await readFile(resolve(presPath, slide))).toString()
-        };
-      })
+      (await readdir(presPath))
+        .filter(slide => slide !== "manifest.json")
+        .sort()
+        .map(async slide => {
+          return {
+            slide,
+            type: slide.endsWith(".md") ? "markdown" : "raw",
+            content: (await readFile(resolve(presPath, slide))).toString()
+          };
+        })
     );
+
+    try {
+      manifests.push(
+        Object.assign(
+          { presentation },
+          JSON.parse(await readFile(resolve(presPath, "manifest.json")))
+        )
+      );
+    } catch (e) {
+      manifests.push({ presentation, title: presentation });
+    }
 
     try {
       await mkdir(outputPath, { recursive: true });
@@ -63,8 +78,5 @@ Handlebars.registerHelper("isMarkdown", function(slide) {
     }
   }
 
-  await writeFile(
-    resolve(output, "index.html"),
-    indexTemplate({ presentations })
-  );
+  await writeFile(resolve(output, "index.html"), indexTemplate({ manifests }));
 })();
