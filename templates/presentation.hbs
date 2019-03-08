@@ -5,8 +5,8 @@
 </head>
 <body>
   <div class="reveal">
-		<div class="slides">
-			{{#each slides as |slide|}}
+    <div class="slides">
+      {{#each slides as |slide|}}
         {{#if (isMarkdown slide)}}
           <section data-markdown="{{slide.slide}}"></section>
         {{else}}
@@ -15,8 +15,8 @@
           </section>
         {{/if}}
       {{/each}}
-		</div>
-	</div>
+    </div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/js/reveal.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/marked.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.7.0/plugin/markdown/markdown.min.js"></script>
