@@ -1,0 +1,14 @@
+{
+  "name": "presentations",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Nicolas Joyard <nicolas@njoyard.fr>",
+  "license": "MIT",
+  "scripts": {
+    "build": "scripts/build.js"
+  },
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "handlebars": "^4.1.0"
+  }
+}
